@@ -106,7 +106,7 @@ jobs:
 
             echo "Criando arquivo de configuração..."
             echo "VITE_BASE_URL=${{ secrets.ENV_BACKEND_URL }}" > ../.env
-            echo "APP_PORT=3000" >> ../.env
+            echo "APP_PORT=3001" >> ../.env
             echo "DOMAIN_NAME=homo-frontend.projeto-integrador.app.br" >> ../.env
 
             echo "Subindo containers..."

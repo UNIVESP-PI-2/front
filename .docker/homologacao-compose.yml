@@ -6,7 +6,7 @@ services:
     container_name: frontend_app
     restart: unless-stopped
     ports:
-      - "${APP_PORT:-3000}:80"
+      - "${APP_PORT:-3001}:80"
     environment:
       - NODE_ENV=production
     networks:
