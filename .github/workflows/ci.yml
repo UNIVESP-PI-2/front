@@ -1,0 +1,133 @@
+name: Continuous Integration
+run-name: ${{ github.actor }} executando CI da branch ${{ github.ref_name }}
+
+on:
+  push:
+    branches: 
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  validation:
+    name: Valida Ambiente da Actions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configuração do ambiente
+        run: echo "Configurações do actions..."
+      
+      - name: Verificando Rede
+        run: echo "Verificando conexão..."
+
+  build:
+    name: Faz build do projeto
+    runs-on: ubuntu-latest
+    needs: validation
+
+    steps:
+      - name: Clonando o repositório
+        uses: actions/checkout@v4
+
+      - name: Verificação do NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instala dependências do projeto
+        run: npm ci
+
+      - name: Build do projeto
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-files
+          path: dist/
+
+  test-unit:
+    name: Testes de unidade
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Rodando testes de unidade
+        run: echo "Ainda não foi implementado nenhum teste de unidade."
+
+  test-integration:
+    name: Testes de Integração
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Rodando testes de integração
+        run: echo "Ainda não foi implementado nenhum teste de integração."
+
+  deploy-homologacao:
+    name: Deploy no ambiente de homologação
+    runs-on: ubuntu-latest
+    needs: [test-unit, test-integration]
+
+    steps:
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_SECRET_KEY }}
+
+      - name: Deploy via SSH
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_NAME_USER }}@${{ secrets.SSH_HOST }} bash << EOF
+            set -e
+
+            REPO="${{ github.repository }}"
+            COMMIT_HASH="${GITHUB_SHA:0:7}"
+            PROJECT_DIR="/home/deploy/homologacao_frontend/\$COMMIT_HASH"
+
+            if [ -d "\$PROJECT_DIR" ]; then
+              echo "Removendo diretório antigo..."
+              rm -rf "\$PROJECT_DIR"
+            fi
+
+            echo "Clonando repositório..."
+            git clone "https://github.com/\$REPO.git" "\$PROJECT_DIR"
+            cd "\$PROJECT_DIR"
+            git checkout "${{ github.ref_name }}"
+
+            echo "Instalando dependências no host..."
+            npm install
+
+            cd .docker
+
+            echo "Parando containers antigos..."
+            docker compose -f homologacao-compose.yml -p frontend down || true
+
+            echo "Criando arquivo de configuração..."
+            echo "VITE_BASE_URL=${{ secrets.ENV_BACKEND_URL }}" > ../.env
+            echo "APP_PORT=3000" >> ../.env
+            echo "DOMAIN_NAME=homo-frontend.projeto-integrador.app.br" >> ../.env
+
+            echo "Subindo containers..."
+            docker compose -f homologacao-compose.yml -p frontend --env-file ../.env up -d --build
+
+            echo "Verificando status..."
+            docker ps --filter "name=frontend"
+
+            echo "Adicionando frontend_app à rede proxy-network do nginx..."
+            docker network connect proxy-network frontend_app || true
+          EOF
+
+  resume:
+    name: Resumo do CI
+    runs-on: ubuntu-latest
+    needs: deploy-homologacao
+
+    steps:
+      - name: Resumo da pipeline CI
+        run: |
+          echo "🚀 CI Pipeline concluída com sucesso!"
+          echo "✅ Build realizado"
+          echo "✅ Deploy de homologação executado"
+          echo "🌐 Aplicação disponível em: homo-frontend.projeto-integrador.app.br"
