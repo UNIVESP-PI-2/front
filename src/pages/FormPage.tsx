@@ -21,7 +21,7 @@ export default function FormPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.post('/api/v1/responder', formData);
+      await api.post('/responder', formData);
       alert('Dados enviados!');
       setFormData({
         nome: '',
