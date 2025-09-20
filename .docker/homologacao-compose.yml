@@ -3,12 +3,16 @@ services:
     build:
       context: ..
       dockerfile: .docker/Dockerfile.prod
+      args:
+        - VITE_BASE_URL=${ENV_BACKEND_URL:-https://homo-backend.projeto-integrador.app.br}
     container_name: frontend_app
     restart: unless-stopped
     ports:
       - "${APP_PORT:-3001}:80"
     environment:
       - NODE_ENV=production
+    env_file:
+      - ../.env.homologacao
     networks:
       - frontend-network
 
