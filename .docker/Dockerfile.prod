@@ -6,7 +6,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Aceitar argumentos de build
-ARG VITE_BASE_URL=https://homo-backend.projeto-integrador.app.br
+ARG VITE_BASE_URL=https://homo-backapp.projeto-integrador.app.br/api/v1
 
 # Definir variável de ambiente para o build
 ENV VITE_BASE_URL=$VITE_BASE_URL

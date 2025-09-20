@@ -4,7 +4,7 @@ services:
       context: ..
       dockerfile: .docker/Dockerfile.prod
       args:
-        - VITE_BASE_URL=${ENV_BACKEND_URL:-https://homo-backend.projeto-integrador.app.br}
+        - VITE_BASE_URL=${ENV_BACKEND_URL:-https://homo-backapp.projeto-integrador.app.br/api/v1}
     container_name: frontend_app
     restart: unless-stopped
     ports:
