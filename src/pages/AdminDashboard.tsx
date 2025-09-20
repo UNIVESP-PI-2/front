@@ -24,8 +24,8 @@ export default function AdminDashboard() {
 
     try {
       const endpoint = valorPesquisa
-        ? `/pesquisar?valorPesquisa=${encodeURIComponent(valorPesquisa)}`
-        : '/listartudo';
+        ? `/api/v1/pesquisar?valorPesquisa=${encodeURIComponent(valorPesquisa)}`
+        : '/api/v1/listartudo';
       const res = await api.get(endpoint, {
         headers: {
           Authorization: token,

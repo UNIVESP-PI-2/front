@@ -20,7 +20,7 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await api.post('/login', formData);
+      const response = await api.post('/api/v1/login', formData);
       if (response.data.msg === 'logado') {
         if (response.data.token) {
           localStorage.setItem('auth', `Bearer ${response.data.token}`);
