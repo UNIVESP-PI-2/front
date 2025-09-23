@@ -1,10 +1,13 @@
-// src/App.tsx
-import AppRoutes from './routes/AppRoutes';
-
-
+import AccessibilityWidget from "./accessibility/AccessibilityWidget.tsx";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  return <AppRoutes />;
+  return (
+    <>
+      <AppRoutes />
+      <AccessibilityWidget />
+    </>
+  );
 }
 
 export default App;
