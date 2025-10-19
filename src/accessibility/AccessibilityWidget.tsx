@@ -47,7 +47,7 @@ export default function AccessibilityWidget() {
                     onClick={() => setDyslexicFont(!dyslexicFont)}
                     className="px-2 py-1 border rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 font-bold"
                     title="OpenDyslexic para melhor leitura"
-                    style={dyslexicFont ? { fontFamily: "'Open-Dyslexic', sans-serif" } : {}}
+                    style={{ fontFamily: "'Open-Dyslexic', sans-serif" }}
                 >
                     {dyslexicFont ? "Fonte Padrão" : "OpenDyslexic"}
                 </button>
