@@ -47,7 +47,7 @@ export default function AccessibilityWidget() {
                     onClick={() => setDyslexicFont(!dyslexicFont)}
                     className="px-2 py-1 border rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 font-bold"
                     title="OpenDyslexic para melhor leitura"
-                    style={dyslexicFont ? { fontFamily: "'OpenDyslexic', sans-serif" } : {}}
+                    style={dyslexicFont ? { fontFamily: "'Open-Dyslexic', sans-serif" } : {}}
                 >
                     {dyslexicFont ? "Fonte Padrão" : "OpenDyslexic"}
                 </button>
@@ -57,18 +57,18 @@ export default function AccessibilityWidget() {
             <style>{`
                 * {
                     font-size: ${fontSize === "text-sm" ? "14px" : fontSize === "text-lg" ? "20px" : "16px"};
-                    font-family: ${dyslexicFont ? "'OpenDyslexic', sans-serif" : "inherit"};
+                    font-family: ${dyslexicFont ? "'Open-Dyslexic', sans-serif" : "inherit"};
                 }
                 
                 body {
                     font-size: ${fontSize === "text-sm" ? "14px" : fontSize === "text-lg" ? "20px" : "16px"};
                     background-color: ${contrast ? "#252525ff" : "inherit"};
                     color: ${contrast ? "#fff" : "inherit"};
-                    font-family: ${dyslexicFont ? "'OpenDyslexic', sans-serif" : "inherit"};
+                    font-family: ${dyslexicFont ? "'Open-Dyslexic', sans-serif" : "inherit"};
                 }
                 
                 html {
-                    font-family: ${dyslexicFont ? "'OpenDyslexic', sans-serif" : "inherit"};
+                    font-family: ${dyslexicFont ? "'Open-Dyslexic', sans-serif" : "inherit"};
                 }
             `}</style>
         </>
