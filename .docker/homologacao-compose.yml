@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: ghcr.io/univesp-pi-2/frontend:homo-latest
+    container_name: homo-front-app
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - homo-network-app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  homo-network-app:
+    external: true
