@@ -57,18 +57,18 @@ export default function AccessibilityWidget() {
             <style>{`
                 * {
                     font-size: ${fontSize === "text-sm" ? "14px" : fontSize === "text-lg" ? "20px" : "16px"};
-                    font-family: ${dyslexicFont ? "'Open-Dyslexic', sans-serif" : "inherit"};
+                    font-family: ${dyslexicFont ? "'Open-Dyslexic', sans-serif" : "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif"};
                 }
                 
                 body {
                     font-size: ${fontSize === "text-sm" ? "14px" : fontSize === "text-lg" ? "20px" : "16px"};
                     background-color: ${contrast ? "#252525ff" : "inherit"};
                     color: ${contrast ? "#fff" : "inherit"};
-                    font-family: ${dyslexicFont ? "'Open-Dyslexic', sans-serif" : "inherit"};
+                    font-family: ${dyslexicFont ? "'Open-Dyslexic', sans-serif" : "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif"};
                 }
                 
                 html {
-                    font-family: ${dyslexicFont ? "'Open-Dyslexic', sans-serif" : "inherit"};
+                    font-family: ${dyslexicFont ? "'Open-Dyslexic', sans-serif" : "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif"};
                 }
             `}</style>
         </>
