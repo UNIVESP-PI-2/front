@@ -40,7 +40,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchData('');
-  }, [navigate]);
+  }, [navigate, fetchData]);
 
   const handleSearch = () => {
     fetchData(filter);
