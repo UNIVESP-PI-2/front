@@ -1,42 +1,99 @@
-name: Continuous Deployment
-run-name: ${{ github.actor }} executando CD da branch ${{ github.ref_name }}
+name: CD - Frontend
+run-name: Deploy Frontend da branch ${{ github.ref_name }}
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    types: [closed]
-    branches: [main]
+    branches:
+      - main
+      - homo
+    paths-ignore:
+      - '.github/workflows/ci.yml'
+      - '**.md'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: univesp-pi-2/frontend
 
 jobs:
-  validation:
-    name: Valida Ambiente da Actions
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Configuração do ambiente
-        run: echo "Configurações do actions..."
-      
-      - name: Verificando Rede
-        run: echo "Verificando conexão com host do deploy..."
-
-      - name: Variáveis de ambiente
-        run: echo "Confirmando a existência de Variáveis necessárias para o deploy..."
-
   deploy:
-    name: Deploy na produção
+    name: Deploy no VPS
     runs-on: ubuntu-latest
-    needs: validation
-    
+    if: github.ref_name == 'main' || github.ref_name == 'homo'
+
     steps:
-      - name: Configuração do ambiente de produção
-        run: echo "Configurando ambiente de produção..."
-      
-      - name: Verificando conexão com produção
-        run: echo "Verificando conexão com host de produção..."
+      - name: Checkout código
+        uses: actions/checkout@v4
 
-      - name: Deploy em produção
-        run: echo "Executando deploy em produção..."
+      - name: Determinar ambiente
+        id: env
+        run: |
+          if [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "ENVIRONMENT=prod" >> $GITHUB_OUTPUT
+            echo "COMPOSE_FILE=producao-compose.yml" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref_name }}" == "homo" ]]; then
+            echo "ENVIRONMENT=homo" >> $GITHUB_OUTPUT
+            echo "COMPOSE_FILE=homologacao-compose.yml" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Verificar deploy produção
-        run: echo "Verificando se o deploy foi bem sucedido..."
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy via SSH (Frontend)
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} bash << 'DEPLOY_SCRIPT'
+            
+            set -e
+            
+            ENVIRONMENT="${{ steps.env.outputs.ENVIRONMENT }}"
+            COMPOSE_FILE="${{ steps.env.outputs.COMPOSE_FILE }}"
+            REPO_DIR="/opt/compose"
+            
+            echo "=========================================="
+            echo "Iniciando deploy do Frontend - $ENVIRONMENT"
+            echo "=========================================="
+            
+            # Navegar para diretório de compose
+            cd "$REPO_DIR"
+            
+            echo "Fazendo login no GitHub Container Registry..."
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login -u "${{ github.actor }}" --password-stdin ${{ env.REGISTRY }}
+            
+            echo "Pulling nova imagem Docker..."
+            if [[ "$ENVIRONMENT" == "prod" ]]; then
+              docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            else
+              docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:homo-latest
+            fi
+            
+            echo "Atualizando containers..."
+            docker compose -f $COMPOSE_FILE down || true
+            docker compose -f $COMPOSE_FILE up -d --no-build
+            
+            echo "Verificando status dos containers..."
+            docker ps --filter "name=$ENVIRONMENT-front"
+            
+            echo "Deploy do Frontend concluído com sucesso!"
+            
+          DEPLOY_SCRIPT
+
+      - name: Verificar saúde do serviço
+        run: |
+          echo "Verificando saúde do serviço..."
+
+      - name: Notificar sucesso
+        run: |
+          echo "## ✅ Deploy Frontend Concluído" >> $GITHUB_STEP_SUMMARY
+          echo "- **Ambiente**: ${{ steps.env.outputs.ENVIRONMENT }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Notificar erro
+        if: failure()
+        run: |
+          echo "## ❌ Deploy Frontend Falhou" >> $GITHUB_STEP_SUMMARY
+          echo "- **Ambiente**: ${{ steps.env.outputs.ENVIRONMENT }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Verifique os logs do SSH para mais detalhes."
