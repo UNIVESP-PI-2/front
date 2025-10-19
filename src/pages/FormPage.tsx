@@ -29,7 +29,7 @@ export default function FormPage() {
         telefone: '',
         mensagem: '',
       });
-    } catch (error) {
+    } catch {
       alert('Erro ao enviar os dados. Tente novamente.');
     }
   };

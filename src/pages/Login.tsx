@@ -30,7 +30,7 @@ export default function Login() {
       } else {
         alert('Credenciais inválidas');
       }
-    } catch (error) {
+    } catch {
       alert('Erro ao realizar login. Tente novamente.');
     }
   };
