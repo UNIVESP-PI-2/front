@@ -67,10 +67,10 @@ jobs:
             
             echo "Atualizando containers..."
             if [[ "$ENVIRONMENT" == "prod" ]]; then
-              docker compose -f "producao-compose-unified.yml" --env-file .env.prod down || true
+              docker compose -f "producao-compose-unified.yml" --env-file .env.prod pull
               docker compose -f "producao-compose-unified.yml" --env-file .env.prod up -d --no-build
             else
-              docker compose -f "homologacao-compose-unified.yml" --env-file .env.homo down || true
+              docker compose -f "homologacao-compose-unified.yml" --env-file .env.homo pull
               docker compose -f "homologacao-compose-unified.yml" --env-file .env.homo up -d --no-build
             fi
             
