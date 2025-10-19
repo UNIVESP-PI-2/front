@@ -31,8 +31,15 @@ export default function AdminDashboard() {
           Authorization: token,
         },
       });
-      setData(res.data);
-    } catch {
+      // Garantir que res.data é um array
+      if (Array.isArray(res.data)) {
+        setData(res.data);
+      } else {
+        console.error('API retornou dados que não são um array:', res.data);
+        setData([]);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
       alert('Erro ao carregar os dados. Verifique sua autenticação.');
       navigate('/login');
     }
