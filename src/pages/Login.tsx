@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/useAuthHook';
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -30,7 +30,7 @@ export default function Login() {
       } else {
         alert('Credenciais inválidas');
       }
-    } catch (error) {
+    } catch {
       alert('Erro ao realizar login. Tente novamente.');
     }
   };
