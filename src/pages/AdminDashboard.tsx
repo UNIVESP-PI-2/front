@@ -1,5 +1,5 @@
 // src/pages/AdminDashboard.tsx
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { api } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ export default function AdminDashboard() {
   const [filter, setFilter] = useState<string>('');
   const navigate = useNavigate();
 
-  const fetchData = async (valorPesquisa: string) => {
+  const fetchData = useCallback(async (valorPesquisa: string) => {
     const token = localStorage.getItem('auth');
     if (!token) {
       navigate('/login');
@@ -32,15 +32,15 @@ export default function AdminDashboard() {
         },
       });
       setData(res.data);
-    } catch (error) {
+    } catch {
       alert('Erro ao carregar os dados. Verifique sua autenticação.');
       navigate('/login');
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchData('');
-  }, [navigate, fetchData]);
+  }, [fetchData]);
 
   const handleSearch = () => {
     fetchData(filter);
