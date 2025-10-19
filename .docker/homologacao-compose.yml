@@ -1,16 +1,19 @@
 version: '3.8'
 
+name: homo-app
+
 services:
   frontend:
     image: ghcr.io/univesp-pi-2/frontend:homo-latest
     container_name: homo-front-app
     restart: unless-stopped
-    ports:
-      - "80:80"
+    expose:
+      - "80"
     environment:
       - NODE_ENV=production
     networks:
       - homo-network-app
+      - proxy-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]
       interval: 30s
@@ -20,4 +23,6 @@ services:
 
 networks:
   homo-network-app:
+    external: true
+  proxy-network:
     external: true
