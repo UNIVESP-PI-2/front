@@ -26,10 +26,8 @@ jobs:
         run: |
           if [[ "${{ github.ref_name }}" == "main" ]]; then
             echo "ENVIRONMENT=prod" >> $GITHUB_OUTPUT
-            echo "COMPOSE_FILE=producao-compose.yml" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref_name }}" == "homo" ]]; then
             echo "ENVIRONMENT=homo" >> $GITHUB_OUTPUT
-            echo "COMPOSE_FILE=homologacao-compose.yml" >> $GITHUB_OUTPUT
           fi
 
       - name: Setup SSH key
@@ -65,17 +63,13 @@ jobs:
               docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:homo-latest
             fi
             
-            echo "Limpando containers órfãos..."
-            # Remover apenas containers orphaned que foram parados
-            docker container prune -f || true
-            
-            echo "Atualizando containers..."
+            echo "Atualizando container frontend..."
             if [[ "$ENVIRONMENT" == "prod" ]]; then
-              docker compose -f "producao-compose-unified.yml" --env-file .env.prod down || true
-              docker compose -f "producao-compose-unified.yml" --env-file .env.prod up -d --no-build
+              docker compose -f "producao-compose.yml" --env-file .env.prod pull
+              docker compose -f "producao-compose.yml" --env-file .env.prod up -d --no-build
             else
-              docker compose -f "homologacao-compose-unified.yml" --env-file .env.homo down || true
-              docker compose -f "homologacao-compose-unified.yml" --env-file .env.homo up -d --no-build
+              docker compose -f "homologacao-compose.yml" --env-file .env.homo pull
+              docker compose -f "homologacao-compose.yml" --env-file .env.homo up -d --no-build
             fi
             
             echo "Verificando status dos containers..."
