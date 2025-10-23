@@ -30,3 +30,8 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+/* Fix para bg-white */
+.bg-white {
+  background-color: #ffffff !important;
+}
