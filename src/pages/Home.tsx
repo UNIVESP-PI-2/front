@@ -65,9 +65,9 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/form"
-              className="bg-white text-green-700 font-semibold px-8 py-3 rounded-lg hover:bg-green-50 transition duration-300"
+              className="bg-white text-green-700 font-bold px-8 py-3 rounded-lg hover:bg-green-50 transition duration-300"
             >
-              Enviar Formulário
+              Enviar um Formulário
             </a>
             <a
               href="/login"
