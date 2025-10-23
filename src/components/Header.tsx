@@ -12,28 +12,48 @@ export default function Header() {
   };
 
   return (
-    <header className="p-4 bg-blue-600 text-white flex justify-between items-center">
-      <h1 className="text-xl font-bold">Meu App</h1>
-      <nav className="space-x-4">
-        <Link to="/">Home</Link>
-        <Link to="/form">Formulário</Link>
-        <Link to="/admin">Admin</Link>
-        {isLoggedIn ? (
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded"
+    <header className="bg-gradient-to-r from-green-700 to-emerald-600 text-white shadow-lg">
+      <div className="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl font-bold tracking-wide">🌿 Clínica Fitoterapia</h1>
+          <p className="text-sm text-green-100 hidden md:block">Terapia com Plantas Medicinais</p>
+        </div>
+        <nav className="flex items-center gap-6 text-sm md:text-base">
+          <Link 
+            to="/" 
+            className="hover:text-green-200 transition duration-300 font-medium"
           >
-            Logout
-          </button>
-        ) : (
-          <Link
-            to="/login"
-            className="bg-green-500 text-white px-4 py-2 rounded"
-          >
-            Login
+            Home
           </Link>
-        )}
-      </nav>
+          <Link 
+            to="/form" 
+            className="hover:text-green-200 transition duration-300 font-medium"
+          >
+            Formulário
+          </Link>
+          <Link 
+            to="/admin" 
+            className="hover:text-green-200 transition duration-300 font-medium"
+          >
+            Admin
+          </Link>
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition duration-300"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition duration-300"
+            >
+              Login
+            </Link>
+          )}
+        </nav>
+      </div>
     </header>
   );
 }

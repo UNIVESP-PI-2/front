@@ -54,43 +54,70 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-semibold mb-4">Respostas Recebidas</h2>
-      <div className="mb-4 flex items-center">
-        <input
-          type="text"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder="Digite para filtrar..."
-          className="border border-gray-300 px-4 py-2 mr-2 w-full"
-        />
-        <button
-          onClick={handleSearch}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Pesquisar
-        </button>
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-green-800 mb-2">📊 Dashboard de Respostas</h2>
+          <p className="text-gray-600">Gerencie e visualize todas as respostas recebidas</p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+            <input
+              type="text"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              placeholder="Digite para filtrar por nome, email ou telefone..."
+              className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-600 transition"
+            />
+            <button
+              onClick={handleSearch}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300"
+            >
+              🔍 Pesquisar
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          {data.length === 0 ? (
+            <div className="p-8 text-center text-gray-500">
+              <p className="text-lg">Nenhuma resposta encontrada</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-green-700 text-white">
+                  <tr>
+                    <th className="px-6 py-4 text-left font-semibold">Nome</th>
+                    <th className="px-6 py-4 text-left font-semibold">Email</th>
+                    <th className="px-6 py-4 text-left font-semibold">Telefone</th>
+                    <th className="px-6 py-4 text-left font-semibold">Mensagem</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {data.map((item, index) => (
+                    <tr key={index} className="hover:bg-green-50 transition">
+                      <td className="px-6 py-4 font-semibold text-gray-800">{item.nome}</td>
+                      <td className="px-6 py-4 text-gray-700">{item.email}</td>
+                      <td className="px-6 py-4 text-gray-700">{item.telefone}</td>
+                      <td className="px-6 py-4 text-gray-700 break-words">
+                        {item.mensagem}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-6 bg-blue-50 border-l-4 border-blue-600 p-4 rounded">
+          <p className="text-blue-700">
+            <strong>Total de registros:</strong> {data.length}
+          </p>
+        </div>
       </div>
-      <table className="table-auto w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border border-gray-300 px-4 py-2">Nome</th>
-            <th className="border border-gray-300 px-4 py-2">Email</th>
-            <th className="border border-gray-300 px-4 py-2">Telefone</th>
-            <th className="border border-gray-300 px-4 py-2">Mensagem</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className="border border-gray-300 px-4 py-2">{item.nome}</td>
-              <td className="border border-gray-300 px-4 py-2">{item.email}</td>
-              <td className="border border-gray-300 px-4 py-2">{item.telefone}</td>
-              <td className="border border-gray-300 px-4 py-2">{item.mensagem}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }

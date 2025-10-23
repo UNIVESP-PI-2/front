@@ -22,7 +22,7 @@ export default function FormPage() {
     e.preventDefault();
     try {
       await api.post('/responder', formData);
-      alert('Dados enviados!');
+      alert('Dados enviados com sucesso!');
       setFormData({
         nome: '',
         email: '',
@@ -35,44 +35,73 @@ export default function FormPage() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-semibold mb-2">Formulário</h2>
-      <form onSubmit={handleSubmit} className="space-y-2">
-        <input
-          type="text"
-          name="nome"
-          placeholder="Nome"
-          value={formData.nome}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-        <input
-          type="tel"
-          name="telefone"
-          placeholder="Telefone"
-          value={formData.telefone}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-        <textarea
-          name="mensagem"
-          placeholder="Mensagem"
-          value={formData.mensagem}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2">
-          Enviar
-        </button>
-      </form>
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg shadow-md p-8 border-l-4 border-green-600">
+          <h2 className="text-3xl font-bold text-green-800 mb-2">📋 Formulário de Contato</h2>
+          <p className="text-gray-600 mb-8">Preencha os campos abaixo para entrar em contato conosco</p>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Nome</label>
+              <input
+                type="text"
+                name="nome"
+                placeholder="Seu nome completo"
+                value={formData.nome}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-600 transition"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="seu.email@exemplo.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-600 transition"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Telefone</label>
+              <input
+                type="tel"
+                name="telefone"
+                placeholder="(11) 99999-9999"
+                value={formData.telefone}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-600 transition"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Mensagem</label>
+              <textarea
+                name="mensagem"
+                placeholder="Descreva sua mensagem ou dúvida..."
+                value={formData.mensagem}
+                onChange={handleChange}
+                required
+                rows={6}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-600 transition"
+              />
+            </div>
+
+            <button 
+              type="submit" 
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
+            >
+              Enviar Formulário
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
