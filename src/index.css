@@ -19,12 +19,6 @@ body {
   color: #333;
 }
 
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
 /* Estilos adicionais para melhor aparência */
 html {
   scroll-behavior: smooth;
