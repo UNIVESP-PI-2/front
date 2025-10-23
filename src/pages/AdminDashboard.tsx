@@ -101,7 +101,7 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4 font-semibold text-gray-800">{item.nome}</td>
                       <td className="px-6 py-4 text-gray-700">{item.email}</td>
                       <td className="px-6 py-4 text-gray-700">{item.telefone}</td>
-                      <td className="px-6 py-4 text-gray-700 max-w-xs truncate" title={item.mensagem}>
+                      <td className="px-6 py-4 text-gray-700 break-words">
                         {item.mensagem}
                       </td>
                     </tr>
